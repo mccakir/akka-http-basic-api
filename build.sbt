@@ -9,15 +9,12 @@ val akkaHttpVersion = "10.2.1"
 val scalaTestVersion = "3.2.2"
 
 libraryDependencies ++= Seq(
-  // akka streams
-  "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-  // akka http
+  "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
+  "com.typesafe.akka" %% "akka-stream-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
+  // test
   "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion,
-  // testing
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "org.scalatest" %% "scalatest" % scalaTestVersion,
-  "com.datastax.cassandra" % "cassandra-driver-core" % "3.10.0",
-
 )
