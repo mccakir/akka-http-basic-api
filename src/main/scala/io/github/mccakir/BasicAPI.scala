@@ -7,7 +7,7 @@ import akka.http.scaladsl.Http.ServerBinding
 
 import scala.util.{Failure, Success}
 
-object BasicAPITyped {
+object BasicAPI {
 
   sealed trait Message
 
@@ -19,21 +19,21 @@ object BasicAPITyped {
 
 
   def main(args: Array[String]): Unit = {
-    val productList: Map[Int, RetailDbTyped.Product] = Map(
-      (1 -> RetailDbTyped.Product(1, "macbook pro", 10000, 1)),
-      (2 -> RetailDbTyped.Product(2, "iphone", 5000, 1)),
-      (3 -> RetailDbTyped.Product(3, "ipad", 3000, 1))
+    val productList: Map[Int, ProductRegistry.Product] = Map(
+      (1 -> ProductRegistry.Product(1, "macbook pro", 10000, 1)),
+      (2 -> ProductRegistry.Product(2, "iphone", 5000, 1)),
+      (3 -> ProductRegistry.Product(3, "ipad", 3000, 1))
     )
     val system: ActorSystem[Message] =
-      ActorSystem(BasicAPITyped("localhost", 8080, productList), "BuildJobsServer")
+      ActorSystem(BasicAPI("localhost", 8080, productList), "BuildJobsServer")
 
   }
 
-  def apply(host: String, port: Int, products: Map[Int, RetailDbTyped.Product]): Behavior[Message] = Behaviors
+  def apply(host: String, port: Int, products: Map[Int, ProductRegistry.Product]): Behavior[Message] = Behaviors
     .setup {
       ctx =>
         implicit val system = ctx.system
-        val productRouteRef = ctx.spawn(RetailDbTyped(products), "retailDbTypedActor")
+        val productRouteRef = ctx.spawn(ProductRegistry(products), "retailDbTypedActor")
         val routes = new ProductRoutes(system, productRouteRef)
         val serverBinding = Http().newServerAt(host, port).bind(routes.productRoutes)
 
